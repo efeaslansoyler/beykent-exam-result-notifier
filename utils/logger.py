@@ -1,4 +1,5 @@
 import logging
+from logging.handlers import RotatingFileHandler
 import os
 from utils.config import get_env_var
 
@@ -11,7 +12,7 @@ if not os.path.exists(logs_dir):
 
 def setup_logger(name: str = "beykent_exam_notifier") -> logging.Logger:
     """
-    Configure and return a logger instance with file and console handlers.
+    Configure and return a logger instance with rotating file and console handlers.
     
     Args:
         name (str): The name of the logger. Defaults to "beykent_exam_notifier"
@@ -32,8 +33,12 @@ def setup_logger(name: str = "beykent_exam_notifier") -> logging.Logger:
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', 
                                 datefmt='%Y-%m-%d %H:%M:%S')
     
-    # Set up file handler to write logs to file
-    file_handler = logging.FileHandler(os.path.join(logs_dir, "app.log"))
+    # Set up rotating file handler (10 MB max size)
+    file_handler = RotatingFileHandler(
+        os.path.join(logs_dir, "app.log"),
+        maxBytes=10 * 1024 * 1024,  # 10 MB
+        backupCount=1  # Keep one backup file
+    )
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
     

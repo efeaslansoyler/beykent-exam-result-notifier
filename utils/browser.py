@@ -195,6 +195,20 @@ class Browser:
             logger.error(f"Error taking screenshot {filename}: {e}")
             raise
 
+    def get_current_url(self) -> str:
+        """
+        Get the current URL of the browser.
+        
+        Returns:
+            str: The current URL
+        """
+        try:
+            logger.info("Getting current URL")
+            return self.driver.current_url
+        except Exception as e:
+            logger.error(f"Error getting current URL: {e}")
+            raise
+
     def quit(self) -> None:
         """
         Properly close the browser and clean up resources.
