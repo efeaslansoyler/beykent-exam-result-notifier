@@ -8,15 +8,15 @@ from utils.logger import logger
 from utils.config import get_env_var
 import os
 
-HEADLESS = get_env_var("HEADLESS")
-SCREENSHOTS_FOLDER = get_env_var("SCREENSHOTS_FOLDER")  # Fixed variable name to match .env
 
 class Browser:
     def __init__(self):
         try:
             logger.info("Initializing browser...")
             self.options = Options()
-            if HEADLESS.lower() == "true":  # Improved boolean check
+            self.headless = get_env_var("HEADLESS")
+            self.screenshot_folder = get_env_var("SCREENSHOTS_FOLDER")
+            if self.headless: 
                 self.options.add_argument("--headless")
             self.driver = webdriver.Firefox(options=self.options)
         except Exception as e:
@@ -115,7 +115,7 @@ class Browser:
         """
         try:
             logger.info(f"Getting text from element: {by}={value}")
-            element = self.wait_for_element(by, value, timeout)
+            element = self.find_element(by, value, timeout)
             return element.text
         except Exception as e:
             logger.error(f"Error getting text from element {by}={value}: {e}")
@@ -133,7 +133,7 @@ class Browser:
         """
         try:
             logger.info(f"Entering text into element: {by}={value}")
-            element = self.wait_for_element(by, value, timeout)
+            element = self.find_element(by, value, timeout)
             element.clear()  # Clear existing text first
             element.send_keys(text)
         except Exception as e:
@@ -173,15 +173,24 @@ class Browser:
             filename (str): The filename to save the screenshot to
         """
 
-        if not os.path.exists(SCREENSHOTS_FOLDER):
-            os.makedirs(SCREENSHOTS_FOLDER)
+        if not os.path.exists(self.screenshot_folder):
+            os.makedirs(self.screenshot_folder)
         
-        filepath = os.path.join(SCREENSHOTS_FOLDER, filename)
+        filepath = os.path.join(self.screenshot_folder, filename)
 
         try:
             logger.info(f"Taking screenshot: {filepath}")
-            element = self.wait_for_element(by, value, timeout)
+            element = self.find_element(by, value, timeout)
+            
+            # Remove height and width constraints using JavaScript
+            self.driver.execute_script("""
+                arguments[0].style.height = 'auto';
+                arguments[0].style.width = 'auto';
+            """, element)
+            
+            # Take the screenshot
             element.screenshot(filepath)
+            
         except Exception as e:
             logger.error(f"Error taking screenshot {filename}: {e}")
             raise
