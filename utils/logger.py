@@ -22,6 +22,9 @@ def setup_logger(name: str = "beykent_exam_notifier") -> logging.Logger:
     # Create logger instance
     logger = logging.getLogger(name)
     
+    # Remove any existing handlers to avoid duplicates
+    logger.handlers = []
+    
     # Set the base logging level to DEBUG to capture all messages
     logger.setLevel(logging.DEBUG)
     
@@ -34,8 +37,14 @@ def setup_logger(name: str = "beykent_exam_notifier") -> logging.Logger:
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
     
-    # Add the file handler to the logger
+    # Set up console handler to show logs in terminal
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)  # Show all logs in console
+    console_handler.setFormatter(formatter)
+    
+    # Add both handlers to the logger
     logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
     
     # Add a separation line to indicate new application run
     logger.info("="*80)
