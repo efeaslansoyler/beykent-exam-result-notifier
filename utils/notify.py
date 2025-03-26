@@ -24,7 +24,8 @@ def send_notification(message: str):
                      data=message.encode("utf-8"),
                      headers={
                          "Title": "Beykent Sınav Sonucunuz Açıklandı !",
-                         "Tags": "loudspeaker"
+                         "Tags": "loudspeaker",
+                         "Priority": "high"
                          })
         
         # Check if the request was successful (raises exception for 4xx/5xx status codes)

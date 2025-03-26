@@ -1,4 +1,5 @@
 from pages.login_page import LoginPage
+from pages.results_page import ResultsPage
 from utils.browser import Browser
 from utils.logger import logger
 
@@ -7,6 +8,8 @@ def main():
     try:
         login_page = LoginPage(browser)
         login_page.login()
+        results_page = ResultsPage(browser)
+        results_page.navigate_to_results_page()
         input("Press Enter to close the browser...")  # Wait for user input on success
     except Exception as e:
         logger.error(f"An error occurred: {e}")
