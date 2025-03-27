@@ -15,7 +15,7 @@ class Browser:
             logger.info("Initializing browser...")
             self.options = Options()
             self.headless = get_env_var("HEADLESS")
-            self.screenshot_folder = get_env_var("SCREENSHOTS_FOLDER")
+            self.screenshot_folder = "data/screenshots"
             if self.headless: 
                 self.options.add_argument("--headless")
             self.driver = webdriver.Firefox(options=self.options)
@@ -81,7 +81,7 @@ class Browser:
         except Exception as e:
             logger.error(f"Error finding element {by}={value}: {e}")
             raise
-    
+            
     def click_element(self, by: By, value: str, timeout: int = 10) -> None:
         """
         Wait for an element to be clickable and click it.
@@ -207,6 +207,28 @@ class Browser:
             return self.driver.current_url
         except Exception as e:
             logger.error(f"Error getting current URL: {e}")
+            raise
+
+    def switch_to_frame(self, frame: str):
+        """
+        Switch to the frame.
+        """
+        try:
+            logger.info("Switching to frame")
+            self.driver.switch_to.frame(frame)
+        except Exception as e:
+            logger.error(f"Error switching to frame: {e}")
+            raise
+
+    def switch_to_default_content(self):
+        """
+        Switch to the default content.
+        """
+        try:
+            logger.info("Switching to default content")
+            self.driver.switch_to.default_content()
+        except Exception as e:
+            logger.error(f"Error switching to default content: {e}")
             raise
 
     def quit(self) -> None:

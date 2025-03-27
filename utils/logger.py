@@ -1,10 +1,9 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import os
-from utils.config import get_env_var
 
 # Get the logs directory from environment variables
-logs_dir = get_env_var("LOGS_FOLDER")
+logs_dir = "logs"
 
 # Create logs directory if it doesn't exist
 if not os.path.exists(logs_dir):

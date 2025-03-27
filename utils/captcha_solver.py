@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
-from transformers import pipeline
+from transformers import pipeline, logging as transformers_logging
 import os
-from utils.config import get_env_var
 from utils.logger import logger
+
+# Disable the transformers logging for model loading
+transformers_logging.set_verbosity_error()
 
 # Initialize the OCR pipeline for image-to-text conversion
 pipe = pipeline("image-to-text", model="microsoft/trocr-large-printed")
@@ -19,7 +21,7 @@ class CaptchaSolver:
         self.image = cv2.imread(image_path)
         self.kernel = np.ones((2, 2), np.uint8)
         # Get data folder path from environment variables
-        self.data_folder = get_env_var("SCREENSHOTS_FOLDER")
+        self.data_folder = "data/screenshots"
         # Ensure data folder exists
         if not os.path.exists(self.data_folder):
             os.makedirs(self.data_folder)
