@@ -6,21 +6,53 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from utils.logger import logger
 from utils.config import get_env_var
+from datetime import datetime
 import os
 
 
 class Browser:
     def __init__(self):
         try:
+            start_time = datetime.now()
             logger.info("Initializing browser...")
+            
             self.options = Options()
             self.headless = get_env_var("HEADLESS")
             self.screenshot_folder = "data/screenshots"
-            if self.headless: 
+            
+            # Performance optimizations
+            self.options.set_preference("browser.cache.disk.enable", False)
+            self.options.set_preference("browser.cache.memory.enable", True)
+            self.options.set_preference("browser.cache.offline.enable", False)
+            self.options.set_preference("network.http.pipelining", True)
+            self.options.set_preference("network.http.proxy.pipelining", True)
+            self.options.set_preference("network.http.pipelining.maxrequests", 8)
+            self.options.set_preference("content.notify.interval", 500000)
+            self.options.set_preference("content.notify.ontimer", True)
+            self.options.set_preference("content.switch.threshold", 250000)
+            self.options.set_preference("browser.download.manager.scanWhenDone", False)
+            self.options.set_preference("browser.sessionstore.interval", 1800000)
+            
+            # Disable unnecessary features
+            self.options.set_preference("app.update.enabled", False)
+            self.options.set_preference("browser.search.update", False)
+            self.options.set_preference("extensions.update.enabled", False)
+            
+            if self.headless:
                 self.options.add_argument("--headless")
+                
             self.driver = webdriver.Firefox(options=self.options)
+            logger.log_operation_time("browser_initialization", start_time)
+            
+            # Set page load strategy
+            self.driver.set_page_load_timeout(30)
+            self.driver.implicitly_wait(10)
+            
         except Exception as e:
-            logger.error(f"Error initializing browser: {e}")
+            logger.log_error_with_context(e, {
+                "operation": "browser_init",
+                "headless": self.headless
+            })
             raise
 
     def __enter__(self) -> 'Browser':
@@ -73,15 +105,24 @@ class Browser:
         Raises:
             TimeoutException: If the element is not found within the timeout period
         """
+        start_time = datetime.now()
         try:
-            logger.info(f"Finding element: {by}={value}")
-            return WebDriverWait(self.driver, timeout).until(
+            logger.log_request_response("FIND_ELEMENT", f"{by}={value}")
+            element = WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_element_located((by, value))
             )
+            return element
         except Exception as e:
-            logger.error(f"Error finding element {by}={value}: {e}")
+            logger.log_error_with_context(e, {
+                "operation": "find_element",
+                "by": by,
+                "value": value,
+                "timeout": timeout
+            })
             raise
-            
+        finally:
+            logger.log_operation_time("find_element", start_time)
+
     def click_element(self, by: By, value: str, timeout: int = 10) -> None:
         """
         Wait for an element to be clickable and click it.
@@ -91,15 +132,22 @@ class Browser:
             value (str): The value to search for
             timeout (int): Maximum time to wait in seconds
         """
+        start_time = datetime.now()
         try:
-            logger.info(f"Clicking element: {by}={value}")
+            logger.log_request_response("CLICK_ELEMENT", f"{by}={value}")
             element = WebDriverWait(self.driver, timeout).until(
                 EC.element_to_be_clickable((by, value))
             )
             element.click()
         except Exception as e:
-            logger.error(f"Error clicking element {by}={value}: {e}")
+            logger.log_error_with_context(e, {
+                "operation": "click_element",
+                "by": by,
+                "value": value
+            })
             raise
+        finally:
+            logger.log_operation_time("click_element", start_time)
 
     def get_text(self, by: By, value: str, timeout: int = 10) -> str:
         """
@@ -131,14 +179,22 @@ class Browser:
             text (str): The text to enter
             timeout (int): Maximum time to wait in seconds
         """
+        start_time = datetime.now()
         try:
-            logger.info(f"Entering text into element: {by}={value}")
+            logger.log_request_response("ENTER_TEXT", f"Element: {by}={value}")
             element = self.find_element(by, value, timeout)
             element.clear()  # Clear existing text first
             element.send_keys(text)
         except Exception as e:
-            logger.error(f"Error entering text into element {by}={value}: {e}")
+            logger.log_error_with_context(e, {
+                "operation": "enter_text",
+                "by": by,
+                "value": value,
+                "text_length": len(text)
+            })
             raise
+        finally:
+            logger.log_operation_time("enter_text", start_time)
     
     def find_elements(self, by: By, value: str, timeout: int = 10) -> list[WebElement]:
         """
@@ -213,31 +269,47 @@ class Browser:
         """
         Switch to the frame.
         """
+        start_time = datetime.now()
         try:
-            logger.info("Switching to frame")
+            logger.log_request_response("SWITCH_FRAME", f"Frame: {frame}")
             self.driver.switch_to.frame(frame)
         except Exception as e:
-            logger.error(f"Error switching to frame: {e}")
+            logger.log_error_with_context(e, {
+                "operation": "switch_frame",
+                "frame": frame
+            })
             raise
+        finally:
+            logger.log_operation_time("switch_frame", start_time)
 
     def switch_to_default_content(self):
         """
         Switch to the default content.
         """
+        start_time = datetime.now()
         try:
-            logger.info("Switching to default content")
+            logger.log_request_response("SWITCH_DEFAULT", "Switching to default content")
             self.driver.switch_to.default_content()
         except Exception as e:
-            logger.error(f"Error switching to default content: {e}")
+            logger.log_error_with_context(e, {
+                "operation": "switch_default_content"
+            })
             raise
+        finally:
+            logger.log_operation_time("switch_default_content", start_time)
 
     def quit(self) -> None:
         """
         Properly close the browser and clean up resources.
         """
+        start_time = datetime.now()
         try:
             logger.info("Closing browser...")
             self.driver.quit()
         except Exception as e:
-            logger.error(f"Error closing browser: {e}")
+            logger.log_error_with_context(e, {
+                "operation": "browser_quit"
+            })
             raise
+        finally:
+            logger.log_operation_time("browser_quit", start_time)
