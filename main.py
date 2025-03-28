@@ -1,4 +1,5 @@
 import sys
+import os
 from datetime import datetime
 from typing import Optional
 
@@ -7,6 +8,34 @@ from pages.results_page import ResultsPage
 from utils.browser import Browser
 from utils.logger import logger
 from utils.notify import Notification
+from utils.constants import USERNAME, PASSWORD, NTFY_TOPIC, HEADLESS_RAW_VALUE
+
+def validate_env_variables():
+    required_vars = {
+        'USERNAME': USERNAME,
+        'PASSWORD': PASSWORD,
+        'NTFY_TOPIC': NTFY_TOPIC
+    }
+    
+    missing_vars = []
+    
+    for var_name, var_value in required_vars.items():
+        if var_value is None or var_value.strip() == "":
+            missing_vars.append(var_name)
+    
+    if missing_vars:
+        logger.error("Missing or empty required environment variables:")
+        for var in missing_vars:
+            logger.error(f"- {var}")
+        return False
+    
+    # Validate HEADLESS value
+    headless_value = HEADLESS_RAW_VALUE.lower()
+    if headless_value not in ["true", "false"]:
+        logger.error(f"HEADLESS environment variable must be 'true' or 'false', got: {headless_value}")
+        return False
+    
+    return True
 
 def initialize_browser() -> Optional[Browser]:
     """Initialize browser with proper error handling"""
@@ -63,6 +92,10 @@ def main():
     total_start_time = datetime.now()
     
     try:
+        # Validate environment variables
+        if not validate_env_variables():
+            sys.exit(1)
+
         # Initialize browser
         browser = initialize_browser()
         if not browser:

@@ -13,8 +13,6 @@ class Notification:
         try:
             logger.info("Initializing Notification system")
             self.topic = NTFY_TOPIC
-            if not self.topic:
-                raise ValueError("TOPIC environment variable not set")
             self.base_url = f"https://ntfy.sh/{self.topic}"
             logger.info(f"Notification configured - URL: {self.base_url}")
         except Exception as e:

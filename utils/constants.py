@@ -5,14 +5,15 @@ import os
 load_dotenv()
 
 # Username and password for Beykent OBS system
-USERNAME = os.getenv("USERNAME")
-PASSWORD = os.getenv("PASSWORD")
+USERNAME = os.getenv("USERNAME", None)
+PASSWORD = os.getenv("PASSWORD", None)
 
 # Browser settings
-HEADLESS = os.getenv("HEADLESS", "false").lower() == "true"
+HEADLESS = os.getenv("HEADLESS", "true").lower() == "true"
+HEADLESS_RAW_VALUE = os.getenv("HEADLESS", "true")
 
 # NTFY.SH settings
-NTFY_TOPIC = os.getenv("NTFY_TOPIC")
+NTFY_TOPIC = os.getenv("NTFY_TOPIC", None)
 
 # Base URLs for Beykent OBS system
 LOGIN_URL = "https://obs.beykent.edu.tr/oibs/std/login.aspx"
