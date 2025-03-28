@@ -83,6 +83,12 @@ cp .env.example .env
 
 > **Not**: Yukarıdaki komutta `/path/to/your/project` kısmını kendi proje dizininizin tam yolu ile değiştirmeyi unutmayın.
 
+> **Özel Çalıştırma Aralığı**: Scripti farklı aralıklarla çalıştırmak için crontab satırındaki `0 * * * *` kısmını değiştirebilirsiniz. Örnekler:
+> - Her 2 saatte bir: `0 */2 * * *`
+> - Her 3 saatte bir: `0 */3 * * *`
+> - Her 30 dakikada bir: `*/30 * * * *`
+> - Her 15 dakikada bir: `*/15 * * * *`
+
 ## Manuel Çalıştırma
 
 Scripti çalıştırmadan önce sanal ortamı aktifleştirmeyi unutmayın:

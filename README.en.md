@@ -83,6 +83,12 @@ cp .env.example .env
 
 > **Note**: Remember to replace `/path/to/your/project` with your project's full path.
 
+> **Custom Check Interval**: To run the script at different intervals, you can modify the `0 * * * *` part in the crontab line. Examples:
+> - Every 2 hours: `0 */2 * * *`
+> - Every 3 hours: `0 */3 * * *`
+> - Every 30 minutes: `*/30 * * * *`
+> - Every 15 minutes: `*/15 * * * *`
+
 ## Manual Running
 
 Remember to activate the virtual environment before running the script:
