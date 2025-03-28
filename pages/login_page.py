@@ -2,33 +2,29 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utils.browser import Browser
-from utils.config import get_env_var
 from utils.captcha_solver import CaptchaSolver
 from utils.logger import logger
 from utils.notify import Notification
 from datetime import datetime
+from selenium.common.exceptions import (TimeoutException,WebDriverException)
+from utils.constants import USERNAME, PASSWORD, LOGIN_URL, HOME_URL, LOGIN_PAGE_LOCATORS
 import time
-from selenium.common.exceptions import (
-    NoSuchElementException,
-    TimeoutException,
-    ElementNotInteractableException,
-    WebDriverException
-)
 
 class LoginPage:
     def __init__(self, browser: Browser):
         self.browser = browser
-        self.username = get_env_var("USERNAME")
-        self.password = get_env_var("PASSWORD")
-        self.login_url = get_env_var("LOGIN_URL")
-        self.home_url = get_env_var("HOME_URL")
+
+        self.username = USERNAME
+        self.password = PASSWORD
+        self.login_url = LOGIN_URL
+        self.home_url = HOME_URL
         
         # Locators
-        self.username_input = (By.ID, "txtParamT01")
-        self.password_input = (By.ID, "txtParamT02")
-        self.captcha_image = (By.ID, "imgCaptchaImg")
-        self.captcha_input = (By.ID, "txtSecCode")
-        self.login_button = (By.ID, "btnLogin")
+        self.username_input = LOGIN_PAGE_LOCATORS["username_input"]
+        self.password_input = LOGIN_PAGE_LOCATORS["password_input"]
+        self.captcha_image = LOGIN_PAGE_LOCATORS["captcha_image"]
+        self.captcha_input = LOGIN_PAGE_LOCATORS["captcha_input"]
+        self.login_button = LOGIN_PAGE_LOCATORS["login_button"]
 
     def navigate_to_login_page(self):
         start_time = datetime.now()

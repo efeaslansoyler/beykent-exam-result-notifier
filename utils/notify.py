@@ -1,18 +1,18 @@
 import aiohttp
 import asyncio
 from utils.logger import logger
-from utils.config import get_env_var
 from pages.results_page import Result
 from datetime import datetime
 from typing import List
 import platform
+from utils.constants import NTFY_TOPIC
 
 class Notification:
     def __init__(self):
         start_time = datetime.now()
         try:
             logger.info("Initializing Notification system")
-            self.topic = get_env_var("TOPIC")
+            self.topic = NTFY_TOPIC
             if not self.topic:
                 raise ValueError("TOPIC environment variable not set")
             self.base_url = f"https://ntfy.sh/{self.topic}"

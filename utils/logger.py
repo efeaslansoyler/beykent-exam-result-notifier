@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import sys
 from typing import Optional, Dict, Any
+from utils.constants import LOGS_FOLDER
 
 class Logger:
     def __init__(self):
@@ -13,7 +14,7 @@ class Logger:
         print("*" * 80)
         
         # Create logs directory if it doesn't exist
-        self.log_directory = "logs"
+        self.log_directory = LOGS_FOLDER
         if not os.path.exists(self.log_directory):
             os.makedirs(self.log_directory)
 

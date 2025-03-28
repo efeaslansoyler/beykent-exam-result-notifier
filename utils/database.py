@@ -2,7 +2,7 @@ import sqlite3
 from models.model import Result
 from utils.logger import logger
 from datetime import datetime
-from typing import Optional, Tuple
+from utils.constants import DATA_FOLDER
 
 
 class Database:
@@ -10,7 +10,7 @@ class Database:
         start_time = datetime.now()
         try:
             logger.info("Initializing database connection")
-            self.db_path = "data/results.db"
+            self.db_path = f"{DATA_FOLDER}/results.db"
             self.conn = sqlite3.connect(self.db_path)
             self.cursor = self.conn.cursor()
             logger.info(f"Connected to database: {self.db_path}")

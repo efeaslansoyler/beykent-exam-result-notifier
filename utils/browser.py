@@ -5,10 +5,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from utils.logger import logger
-from utils.config import get_env_var
 from datetime import datetime
 import os
-
+from utils.constants import HEADLESS, SCREENSHOTS_FOLDER
 
 class Browser:
     def __init__(self):
@@ -17,8 +16,8 @@ class Browser:
             logger.info("Initializing browser...")
             
             self.options = Options()
-            self.headless = get_env_var("HEADLESS")
-            self.screenshot_folder = "data/screenshots"
+            self.headless = HEADLESS
+            self.screenshot_folder = SCREENSHOTS_FOLDER
             
             # Performance optimizations
             self.options.set_preference("browser.cache.disk.enable", False)

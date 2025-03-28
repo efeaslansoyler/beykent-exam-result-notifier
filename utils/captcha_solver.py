@@ -3,6 +3,7 @@ import numpy as np
 from transformers import pipeline, logging as transformers_logging
 import os
 from utils.logger import logger
+from utils.constants import SCREENSHOTS_FOLDER
 
 # Disable the transformers logging for model loading
 transformers_logging.set_verbosity_error()
@@ -21,7 +22,7 @@ class CaptchaSolver:
         self.image = cv2.imread(image_path)
         self.kernel = np.ones((2, 2), np.uint8)
         # Get data folder path from environment variables
-        self.data_folder = "data/screenshots"
+        self.data_folder = SCREENSHOTS_FOLDER
         # Ensure data folder exists
         if not os.path.exists(self.data_folder):
             os.makedirs(self.data_folder)

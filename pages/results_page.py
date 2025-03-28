@@ -1,14 +1,12 @@
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException
 from utils.browser import Browser
 from utils.logger import logger
 from utils.database import Database
 from models.model import Result
 from typing import List
-import time
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from datetime import datetime
+from utils.constants import RESULTS_PAGE_LOCATORS
 
 class ResultsPage:
     def __init__(self, browser: Browser):
@@ -16,10 +14,10 @@ class ResultsPage:
         self.database = Database()
         
         # Locators
-        self.menu_button = (By.XPATH, "/html/body/form/div[6]/aside/div[2]/nav/span/ul/li[3]/a")
-        self.results_page_button = (By.XPATH, "/html/body/form/div[6]/aside/div[2]/nav/span/ul/li[3]/ul/li[4]/a")
-        self.results_table = (By.XPATH, '//*[@id="grd_not_listesi"]')
-        self.results_frame = "IFRAME1"
+        self.menu_button = RESULTS_PAGE_LOCATORS["menu_button"]
+        self.results_page_button = RESULTS_PAGE_LOCATORS["results_page_button"]
+        self.results_table = RESULTS_PAGE_LOCATORS["results_table"]
+        self.results_frame = RESULTS_PAGE_LOCATORS["results_frame"]
         
     def navigate_to_results_page(self) -> None:
         """Navigate to the results page through the menu"""
