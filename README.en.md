@@ -112,6 +112,16 @@ python main.py
 - Internet connection
 - ntfy.sh notification topic (no account required)
 
+## ntfy.sh Setup
+
+Install ntfy.sh from your device's app store:
+- [Google Play Store](https://play.google.com/store/apps/details?id=io.heckel.ntfy)
+- [App Store](https://apps.apple.com/app/ntfy/id1625396347)
+
+After installation, open the app and subscribe to your topic to receive notifications.
+
+> **Security Note**: Choose a unique and personal topic name (e.g., `john-exam-2024` or `alice-beykent`) as anyone can send notifications to any topic. Using your name, nickname, or any personal identifier makes it harder for others to guess and send unwanted notifications.
+
 ## Security and Privacy
 
 - All operations are performed 100% locally

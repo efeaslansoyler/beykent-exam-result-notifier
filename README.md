@@ -112,6 +112,16 @@ python main.py
 - İnternet bağlantısı
 - ntfy.sh bildirim konusu (hesap oluşturmaya gerek yok)
 
+## ntfy.sh Kurulumu
+
+ntfy.sh uygulamasını cihazınızın uygulama mağazasından indirin:
+- [Google Play Store](https://play.google.com/store/apps/details?id=io.heckel.ntfy)
+- [App Store](https://apps.apple.com/app/ntfy/id1625396347)
+
+Kurulumdan sonra uygulamayı açın ve bildirimleri almak için konunuza abone olun.
+
+> **Güvenlik Notu**: Herkes herhangi bir konuya bildirim gönderebileceği için benzersiz ve kişisel bir konu adı seçin (örn: `ahmet-sinav-2024` veya `ayse-beykent`). İsminizi, takma adınızı veya kişisel bir tanımlayıcı kullanmak, başkalarının tahmin etmesini ve istenmeyen bildirimler göndermesini zorlaştırır.
+
 ## Güvenlik ve Gizlilik
 
 - Tüm işlemler %100 yerel olarak gerçekleştirilir
