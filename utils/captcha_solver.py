@@ -1,3 +1,19 @@
+"""
+This module is based on the work from:
+https://github.com/AmireNoori/MathCaptchaSolver
+
+Original code supported basic arithmetic operations with sign detection.
+
+Modifications made:
+- Added logging system integration for better debugging
+- Added error handling and validation
+- Implemented dynamic data folder management
+- Added support for saving processed images in a dedicated folder
+- Removed hardcoded file paths
+- Optimized image cropping positions and dimensions
+- Added better number cleaning and validation
+"""
+
 import cv2
 import numpy as np
 from transformers import pipeline, logging as transformers_logging
